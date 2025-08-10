@@ -1,0 +1,143 @@
+{% extends 'core/base.html' %}
+
+{% block title %}DevLink - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto" style="font-size: 12px;">
+        <!-- Search Form -->
+        <form method="get" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Search by name"
+                        value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="category" class="form-select form-select-sm">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.slug }}" {% if request.GET.category|default_if_none:'' == cat.slug %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="author" class="form-select form-select-sm">
+                        <option value="">All Authors</option>
+                        {% for auth in authors %}
+                        <option value="{{ auth.username }}" {% if request.GET.author|default_if_none:'' == auth.username %}selected{% endif %}>
+                            {{ auth.username }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="tag" class="form-select form-select-sm">
+                        <option value="">All Tags</option>
+                        {% for t in tags %}
+                        <option value="{{ t.slug }}" {% if request.GET.tag|default_if_none:'' == t.slug %}selected{% endif %}>
+                            {{ t.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary btn-sm ms-2">Clear</a>
+                </div>
+            </div>
+        </form>
+
+        <h1 class="mb-4" style="font-size: 24px;">
+            {% if request.GET.filter == 'my' %}My Resources
+            {% elif request.GET.filter == 'others' %}Others' Resources
+            {% else %}All Resources{% endif %}
+        </h1>
+
+        {% if user.is_authenticated %}
+        <div class="d-flex gap-2 mb-4">
+            <a href="{% url 'resource_create' %}" class="btn btn-primary" style="font-size: 12px;">
+                Add New Resource
+            </a>
+
+            <a href="?filter=my"
+                class="btn btn-{% if request.GET.filter == 'my' %}success{% else %}outline-secondary{% endif %}"
+                style="font-size: 12px;">
+                My Resources
+            </a>
+            <a href="?filter=others"
+                class="btn btn-{% if request.GET.filter == 'others' %}success{% else %}outline-secondary{% endif %}"
+                style="font-size: 12px;">
+                Others' Resources
+            </a>
+            <a href="?filter=all"
+                class="btn btn-{% if not request.GET.filter or request.GET.filter == 'all' %}success{% else %}outline-secondary{% endif %}"
+                style="font-size: 12px;">
+                All Resources
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for resource in resources %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ resource.title }}</h5>
+                        <p class="card-text">{{ resource.description|truncatewords:30 }}</p>
+                        <div class="mb-2">
+                            <span class="badge bg-secondary">{{ resource.category.name }}</span>
+                            {% for tag in resource.tags.all %}
+                            <span class="badge bg-info text-dark">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <a href="{{ resource.get_absolute_url }}" class="btn btn-sm btn-outline-primary">View
+                            Details</a>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'bookmark_resource' resource.pk %}"
+                            class="btn btn-sm btn-outline-success ms-2">Bookmark</a>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Posted by {{ resource.author.username }} on {{ resource.created_at|date:"M d, Y H:i" }}</small>
+                        <span class="float-end">
+                            <i class="bi bi-bookmark"></i> {{ resource.bookmark_set.count }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+        <nav class="mt-4">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

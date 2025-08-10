@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Bookmarks{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h1 class="mb-4">My Bookmarks</h1>
+        
+        {% if bookmarks %}
+        <div class="list-group">
+            {% for bookmark in bookmarks %}
+            <a href="{{ bookmark.resource.get_absolute_url }}" class="list-group-item list-group-item-action">
+                {{ bookmark.resource.title }}
+                <span class="badge bg-secondary float-end">
+                    {{ bookmark.resource.bookmark_set.count }} bookmarks
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">You haven't bookmarked any resources yet.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

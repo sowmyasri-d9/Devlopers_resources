@@ -1,0 +1,7 @@
+CREATE DATABASE devlink_db;
+CREATE USER devlink_user WITH PASSWORD 'Devlink@!4321';
+ALTER ROLE devlink_user SET client_encoding TO 'utf8';
+ALTER ROLE devlink_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE devlink_user SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE devlink_db TO devlink_user;
+\q

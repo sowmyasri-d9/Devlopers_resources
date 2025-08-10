@@ -1,0 +1,15 @@
+{% extends '../core/base.html' %}
+
+{% block content %}
+  <h2>Share "{{ resource.title }}" by Email</h2>
+
+  {% if sent %}
+    <div class="alert alert-success">Email successfully sent!</div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Send Email</button>
+  </form>
+{% endblock %}
