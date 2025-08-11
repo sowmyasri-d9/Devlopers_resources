@@ -1,7 +1,9 @@
 # Django Project Setup Guide on Windows 11
 ## 1. Install Python
 Check if Python is installed:
-    ```bash python --version
+    
+    ```bash 
+    python --version
 
 If not, download and install it from https://www.python.org/downloads/windows/
 Ensure you check 'Add Python to PATH' during installation.
