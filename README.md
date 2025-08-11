@@ -9,20 +9,24 @@ If not, download and install it from https://www.python.org/downloads/windows/
 Ensure you check 'Add Python to PATH' during installation.
 ## 2. Create a Virtual Environment
 In your project directory:
-    ```bash python -m venv venv
+    ```bash 
+    python -m venv venv
 
 This will create a virtual environment in a folder named 'venv'.
 ## 3. Activate the Virtual Environment
 In Command Prompt:
-    ```bash venv\Scripts\activate
+    ```bash 
+    venv\Scripts\activate
 
 Your terminal should now show (venv) prefix.
 ## 4. Install Django and Dependencies
 If you have a requirements.txt:
-    ```bash pip install -r requirements.txt
+    ```bash 
+    pip install -r requirements.txt
 
 Otherwise install manually:
-    ```bash pip install django psycopg2
+    ```bash 
+    pip install django psycopg2
 ## 5. Configure PostgreSQL
 1. Install PostgreSQL from https://www.postgresql.org/download/windows/
 2. Create a database and user using pgAdmin or CLI.
@@ -40,15 +44,19 @@ DATABASES = {
 }
 ## 6. Run Migrations
 Run the following commands:
-    ```bash python manage.py makemigrations
-    ```bash python manage.py migrate
+    ```bash 
+    python manage.py makemigrations
+    ```bash 
+    python manage.py migrate
 ## 7. Create Superuser
 Run:
-    ```bash python manage.py createsuperuser
+    ```bash 
+    python manage.py createsuperuser
 Follow the prompts to create an admin user.
 ## 8. Run the Development Server
 Start the server:
-    ```bash python manage.py runserver
+    ```bash 
+    python manage.py runserver
 Then visit http://127.0.0.1:8000/ in your browser.
 ## 9. Access Admin
 Visit http://127.0.0.1:8000/admin/ and login with your superuser credentials.
